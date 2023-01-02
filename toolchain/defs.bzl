@@ -19,7 +19,7 @@
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-load("//sysroot:flags.bzl", "cflags", "cxxflags", "fflags", "ldflags", "includes")
+load("//sysroot:flags.bzl", "cflags", "cxxflags", "fflags", "includes", "ldflags")
 
 def _gcc_toolchain_impl(rctx):
     absolute_toolchain_root = str(rctx.path("."))
@@ -101,9 +101,9 @@ _FEATURE_ATTRS = {
     ),
     "extra_ldflags": attr.string_list(
         doc = "Extra flags for linking." +
-            " %sysroot% is rendered to the sysroot path." +
-            " %workspace% is rendered to the toolchain root path." +
-            " See https://github.com/bazelbuild/bazel/blob/a48e246e/src/main/java/com/google/devtools/build/lib/rules/cpp/CcToolchainProviderHelper.java#L234-L254.",
+              " %sysroot% is rendered to the sysroot path." +
+              " %workspace% is rendered to the toolchain root path." +
+              " See https://github.com/bazelbuild/bazel/blob/a48e246e/src/main/java/com/google/devtools/build/lib/rules/cpp/CcToolchainProviderHelper.java#L234-L254.",
         default = [],
     ),
     "gcc_toolchain_workspace_name": attr.string(
@@ -112,9 +112,9 @@ _FEATURE_ATTRS = {
     ),
     "includes": attr.string_list(
         doc = "Extra includes for compiling C and C++." +
-            " %sysroot% is rendered to the sysroot path." +
-            " %workspace% is rendered to the toolchain root path." +
-            " See https://github.com/bazelbuild/bazel/blob/a48e246e/src/main/java/com/google/devtools/build/lib/rules/cpp/CcToolchainProviderHelper.java#L234-L254.",
+              " %sysroot% is rendered to the sysroot path." +
+              " %workspace% is rendered to the toolchain root path." +
+              " See https://github.com/bazelbuild/bazel/blob/a48e246e/src/main/java/com/google/devtools/build/lib/rules/cpp/CcToolchainProviderHelper.java#L234-L254.",
         default = [],
     ),
     "sysroot": attr.string(
@@ -228,11 +228,10 @@ def _render_tool_paths(rctx, repository_name, toolchain_files_repository_name, b
 _DEFAULT_GCC_VERSION = "10.3.0"
 
 def gcc_register_toolchain(
-    name,
-    target_arch,
-    gcc_version = _DEFAULT_GCC_VERSION,
-    **kwargs
-):
+        name,
+        target_arch,
+        gcc_version = _DEFAULT_GCC_VERSION,
+        **kwargs):
     """Declares a `gcc_toolchain` and calls `register_toolchain` for it.
 
     Args:
@@ -256,6 +255,7 @@ def gcc_register_toolchain(
         )
 
     binary_prefix = kwargs.pop("binary_prefix", "arm" if target_arch == ARCHS.armv7 else target_arch)
+
     # The following glob matches all the cases:
     #   - aarch64-buildroot-linux-gnu
     #   - arm-buildroot-linux-gnueabihf
@@ -341,6 +341,13 @@ _TOOLCHAINS = {
             sha256 = "6fe812add925493ea0841365f1fb7ca17fd9224bab61a731063f7f12f3a621b0",
             strip_prefix = "x86-64--glibc--stable-2021.11-5",
             url = "https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64/tarballs/x86-64--glibc--stable-2021.11-5.tar.bz2",
+        ),
+    },
+    "12.2.0": {
+        "x86_64": struct(
+            sha256 = "9a09ac03001ef2a6cab391cc658fc2a32730b6a8f25614e97a91b9a79537fe33",
+            strip_prefix = "x86-64--glibc--bleeding-edge-2022.08-1",
+            url = "https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64/tarballs/x86-64--glibc--bleeding-edge-2022.08-1.tar.bz2",
         ),
     },
 }
