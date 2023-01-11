@@ -15,9 +15,15 @@
 
 #include <iostream>
 #include <fstream>
+#include <filesystem>
 
 int main()
 {
+    if (!std::filesystem::exists("examples/hello_world_cpp/names.txt"))
+    {
+        std::cout << "file not found!" << std::endl;
+        return 1;
+    }
     std::ifstream names("examples/hello_world_cpp/names.txt");
     if (!names.is_open())
     {
